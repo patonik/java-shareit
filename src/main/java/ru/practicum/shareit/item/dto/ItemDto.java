@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.item.model.Status;
@@ -11,7 +12,9 @@ import ru.practicum.shareit.item.model.Status;
 @Builder
 public class ItemDto {
     private Long id;
+    @NotNull
     private String name;
     private String description;
-    private Status status;
+    @Builder.Default
+    private Status status = Status.AVAILABLE;
 }
