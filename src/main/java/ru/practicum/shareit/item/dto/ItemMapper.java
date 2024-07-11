@@ -20,4 +20,13 @@ public class ItemMapper {
             .ownerId(userId)
             .build();
     }
+    public static Item toEntity(ItemDto itemDto, Long userId, Item item){
+        return Item.builder()
+                .id(itemDto.getIdIfExists().orElse(itemDto.getId()))
+                .name(itemDto.getNameIfExists().orElse(item.getName()))
+                .description(itemDto.getDescriptionIfExists().orElse(item.getDescription()))
+                .available(itemDto.getAvailableIfExists().orElse(item.getAvailable()))
+                .ownerId(userId)
+                .build();
+    }
 }

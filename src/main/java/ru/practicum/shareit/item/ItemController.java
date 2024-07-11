@@ -33,31 +33,37 @@ public class ItemController {
     public ResponseEntity<ItemDto> addItem(@RequestBody @NotNull @Valid ItemDto itemDto,
                                            @RequestHeader("X-Sharer-User-Id") @NotNull Long userId) {
         ItemDto created = itemService.addItem(itemDto, userId);
+        log.info("ItemDto created: " + created.toString());
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(@RequestBody @NotNull @Valid ItemDto itemDto,
-                                            @RequestHeader("X-Sharer-User-Id") @NotNull @Min(1) Long userId) {
-        ItemDto updated = itemService.editItem(itemDto, userId);
+                                            @RequestHeader("X-Sharer-User-Id") @NotNull @Min(1) Long userId,
+                                            @PathVariable @NotNull @Min(1) Long itemId) {
+        ItemDto updated = itemService.editItem(itemDto, userId, itemId);
+        log.info("ItemDto updated: " + updated.toString());
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemDto> getItem(@PathVariable @NotNull @Min(1) Long itemId) {
         ItemDto found = itemService.getItem(itemId);
+        log.info("ItemDto found: " + found.toString());
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<ItemDto>> getItems(@RequestHeader("X-Sharer-User-Id") @NotNull @Min(1) Long userId) {
         List<ItemDto> found = itemService.getItems(userId);
+        log.info("ItemDto found: " + found.toString());
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> findItems(@RequestParam("text") String text) {
         List<ItemDto> found = itemService.findItems(text);
+        log.info("ItemDto found: " + found.toString());
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 }

@@ -36,7 +36,14 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toDto(created);
     }
 
-    public ItemDto editItem(ItemDto itemDto, Long userId) {
+    public ItemDto editItem(ItemDto itemDto, Long userId, Long itemId) {
+        if (!userRepository.containsUser(userId)) {
+            throw new AccessException();
+        }
+        if (!itemRepository.containsItem(itemId)){
+            throw new EntityNotFoundException();
+        }
+        itemDto.setId(itemId);
         Item updated =
             itemRepository.save(ItemMapper.toEntity(itemDto, userId), userId).orElseThrow(EntityNotFoundException::new);
         return ItemMapper.toDto(updated);

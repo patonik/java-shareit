@@ -45,4 +45,11 @@ public class ItemRepository {
             .filter(x -> x.getName().contains(text) || x.getDescription().contains(text))
             .toList();
     }
+    public boolean containsUser(Long userId) {
+        return userItemIndex.containsKey(userId);
+    }
+
+    public boolean containsItem(Long itemId) {
+        return itemStorage.containsKey(itemId);
+    }
 }
