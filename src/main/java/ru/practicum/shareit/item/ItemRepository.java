@@ -3,16 +3,20 @@ package ru.practicum.shareit.item;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ItemRepository {
-    private final HashMap<Long, Item> itemStorage = new HashMap<>();
+    private final Map<Long, Item> itemStorage = new HashMap<>();
+    private final Map<Long, Set<Long>> userItemIndex = new HashMap<>();
+
     private long generatedId = 1;
 
-    public Optional<Item> save(Item item) {
+
+    public Optional<Item> save(Item item, Long userId) {
+        if (!userItemIndex.containsKey(userId)) {
+            userItemIndex.put(userId, new HashSet<>());
+        }
         Long itemId = item.getId();
         if (itemId == null) {
             item.setId(generatedId++);
@@ -20,6 +24,7 @@ public class ItemRepository {
             return Optional.empty();
         }
         itemStorage.put(itemId, item);
+        userItemIndex.get(userId).add(itemId);
         return Optional.of(item);
     }
 
@@ -31,14 +36,13 @@ public class ItemRepository {
     }
 
     public List<Item> findByUserId(Long userId) {
-        return itemStorage.values().stream()
-                .filter(x -> x.getOwnerId().equals(userId))
-                .toList();
+        return userItemIndex.get(userId).stream().map(itemStorage::get)
+            .toList();
     }
 
     public List<Item> findByNameAndDescription(String text) {
         return itemStorage.values().stream()
-                .filter(x -> x.getName().contains(text) || x.getDescription().contains(text))
-                .toList();
+            .filter(x -> x.getName().contains(text) || x.getDescription().contains(text))
+            .toList();
     }
 }

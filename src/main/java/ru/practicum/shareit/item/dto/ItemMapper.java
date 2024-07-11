@@ -8,7 +8,7 @@ public class ItemMapper {
             .id(item.getId())
             .name(item.getName())
             .description(item.getDescription())
-            .status(item.getStatus())
+            .available(item.getAvailable())
             .build();
     }
     public static Item toEntity(ItemDto itemDto, Long userId){
@@ -16,7 +16,7 @@ public class ItemMapper {
             .id(itemDto.getId())
             .name(itemDto.getName())
             .description(itemDto.getDescription())
-            .status(itemDto.getStatus())
+            .available(itemDto.getAvailable())
             .ownerId(userId)
             .build();
     }

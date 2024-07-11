@@ -9,6 +9,8 @@ import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.exception.RepositoryException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.item.exception.AccessException;
 
 import java.util.List;
 
@@ -16,20 +18,27 @@ import java.util.List;
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository) {
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
     public ItemDto addItem(ItemDto itemDto, Long userId) {
+        if (!userRepository.containsUser(userId)) {
+            throw new AccessException();
+        }
         itemDto.setId(null);
-        Item created = itemRepository.save(ItemMapper.toEntity(itemDto, userId)).orElseThrow(RepositoryException::new);
+        Item created =
+            itemRepository.save(ItemMapper.toEntity(itemDto, userId), userId).orElseThrow(RepositoryException::new);
         return ItemMapper.toDto(created);
     }
 
     public ItemDto editItem(ItemDto itemDto, Long userId) {
-        Item updated = itemRepository.save(ItemMapper.toEntity(itemDto, userId)).orElseThrow(EntityNotFoundException::new);
+        Item updated =
+            itemRepository.save(ItemMapper.toEntity(itemDto, userId), userId).orElseThrow(EntityNotFoundException::new);
         return ItemMapper.toDto(updated);
     }
 
