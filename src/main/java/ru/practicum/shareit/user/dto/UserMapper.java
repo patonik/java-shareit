@@ -18,6 +18,7 @@ public class UserMapper {
                 .email(userDto.getEmailIfExists().orElse(user.getEmail()))
                 .build();
     }
+
     public static User toEntity(ru.practicum.shareit.user.dto.UserDto userDto) {
         return User.builder()
                 .name(userDto.getNameIfExists().orElse(""))

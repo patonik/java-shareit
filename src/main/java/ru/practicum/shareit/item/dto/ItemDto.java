@@ -1,11 +1,12 @@
 package ru.practicum.shareit.item.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.Optional;
+
+import static io.micrometer.common.util.StringUtils.isBlank;
 
 /**
  * TODO Sprint add-controllers.
@@ -14,23 +15,33 @@ import java.util.Optional;
 @Builder
 public class ItemDto {
     private Long id;
-    @NotBlank
     private String name;
-    @NotBlank
     private String description;
-    @NotNull
     private Boolean available;
 
-    public Optional<Long> getIdIfExists(){
+    @JsonIgnore
+    public Optional<Long> getIdIfExists() {
         return Optional.ofNullable(id);
     }
-    public Optional<String> getNameIfExists(){
-        return Optional.ofNullable(name);
+
+    @JsonIgnore
+    public Optional<String> getNameIfExists() {
+        if (isBlank(name)) {
+            return Optional.empty();
+        }
+        return Optional.of(name);
     }
-    public Optional<String> getDescriptionIfExists(){
-        return Optional.ofNullable(description);
+
+    @JsonIgnore
+    public Optional<String> getDescriptionIfExists() {
+        if (isBlank(description)) {
+            return Optional.empty();
+        }
+        return Optional.of(description);
     }
-    public Optional<Boolean> getAvailableIfExists(){
+
+    @JsonIgnore
+    public Optional<Boolean> getAvailableIfExists() {
         return Optional.ofNullable(available);
     }
 }

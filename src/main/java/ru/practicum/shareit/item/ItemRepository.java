@@ -3,7 +3,12 @@ package ru.practicum.shareit.item;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class ItemRepository {
@@ -23,6 +28,7 @@ public class ItemRepository {
         } else if (!itemStorage.containsKey(itemId)) {
             return Optional.empty();
         }
+        itemId = item.getId();
         itemStorage.put(itemId, item);
         userItemIndex.get(userId).add(itemId);
         return Optional.of(item);
@@ -37,19 +43,28 @@ public class ItemRepository {
 
     public List<Item> findByUserId(Long userId) {
         return userItemIndex.get(userId).stream().map(itemStorage::get)
-            .toList();
+                .toList();
     }
 
-    public List<Item> findByNameAndDescription(String text) {
+    public List<Item> findByNameAndDescriptionAndAvailable(String text) {
         return itemStorage.values().stream()
-            .filter(x -> x.getName().contains(text) || x.getDescription().contains(text))
-            .toList();
+                .filter(x -> (x.getName().toLowerCase().contains(text.toLowerCase()) ||
+                        x.getDescription().toLowerCase().contains(text.toLowerCase())) &&
+                        x.getAvailable().equals(true)
+                )
+                .toList();
+
     }
+
     public boolean containsUser(Long userId) {
         return userItemIndex.containsKey(userId);
     }
 
     public boolean containsItem(Long itemId) {
         return itemStorage.containsKey(itemId);
+    }
+
+    public boolean userPossessesItem(Long userId, Long itemId) {
+        return userItemIndex.containsKey(userId) && userItemIndex.get(userId).contains(itemId);
     }
 }

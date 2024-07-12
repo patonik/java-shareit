@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.user.exception.ConflictException;
 import ru.practicum.shareit.user.exception.DataOperationException;
+
 @RestControllerAdvice
 @Slf4j
 public class UserControllerAdvice {
@@ -22,18 +23,21 @@ public class UserControllerAdvice {
         log.warn("Conflict: {}", e.getMessage());
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.CONFLICT.value()), e);
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
         log.warn("ConstraintViolation: {}", e.getMessage());
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         log.warn("MethodArgumentNotValid: {}", e.getMessage());
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataOperationException.class)
     public ErrorResponse handleDataOperationException(final DataOperationException e) {

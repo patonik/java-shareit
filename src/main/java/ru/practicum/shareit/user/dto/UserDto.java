@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +14,14 @@ public class UserDto {
     private String name;
     @Email
     private String email;
-    public Optional<String> getNameIfExists(){
+
+    @JsonIgnore
+    public Optional<String> getNameIfExists() {
         return Optional.ofNullable(name);
     }
-    public Optional<String> getEmailIfExists(){
+
+    @JsonIgnore
+    public Optional<String> getEmailIfExists() {
         return Optional.ofNullable(email);
     }
 }

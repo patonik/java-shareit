@@ -1,6 +1,6 @@
 package ru.practicum.shareit.item.exception;
 
-public class EntityNotFoundException extends RepositoryException{
+public class EntityNotFoundException extends RepositoryException {
     public EntityNotFoundException() {
         super();
     }
