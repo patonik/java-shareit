@@ -1,27 +1,16 @@
 package ru.practicum.shareit.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Optional;
+import ru.practicum.shareit.user.validation.NullableNotBlankConstraint;
 
 @Data
 @Builder
 public class UserDto {
     private Long id;
+    @NullableNotBlankConstraint
     private String name;
     @Email
     private String email;
-
-    @JsonIgnore
-    public Optional<String> getNameIfExists() {
-        return Optional.ofNullable(name);
-    }
-
-    @JsonIgnore
-    public Optional<String> getEmailIfExists() {
-        return Optional.ofNullable(email);
-    }
 }

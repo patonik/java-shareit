@@ -1,28 +1,16 @@
 package ru.practicum.shareit.user.dto;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import ru.practicum.shareit.user.model.User;
 
-public class UserMapper {
-    public static UserDto toDto(User user) {
-        return ru.practicum.shareit.user.dto.UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
-    }
+@Mapper(componentModel = "spring",
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface UserMapper {
+    UserDto toDto(User user);
 
-    public static User toEntity(ru.practicum.shareit.user.dto.UserDto userDto, User user) {
-        return User.builder()
-                .id(user.getId())
-                .name(userDto.getNameIfExists().orElse(user.getName()))
-                .email(userDto.getEmailIfExists().orElse(user.getEmail()))
-                .build();
-    }
+    User toEntity(UserDto userDto);
 
-    public static User toEntity(ru.practicum.shareit.user.dto.UserDto userDto) {
-        return User.builder()
-                .name(userDto.getNameIfExists().orElse(""))
-                .email(userDto.getEmailIfExists().orElseThrow(RuntimeException::new))
-                .build();
-    }
+    User updateEntity(UserDto userDto, @MappingTarget User user);
 }

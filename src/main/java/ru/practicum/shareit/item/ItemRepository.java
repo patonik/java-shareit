@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -18,7 +17,7 @@ public class ItemRepository {
     private long generatedId = 1;
 
 
-    public Optional<Item> save(Item item, Long userId) {
+    public Item save(Item item, Long userId) {
         if (!userItemIndex.containsKey(userId)) {
             userItemIndex.put(userId, new HashSet<>());
         }
@@ -26,33 +25,33 @@ public class ItemRepository {
         if (itemId == null) {
             item.setId(generatedId++);
         } else if (!itemStorage.containsKey(itemId)) {
-            return Optional.empty();
+            return null;
         }
         itemId = item.getId();
         itemStorage.put(itemId, item);
         userItemIndex.get(userId).add(itemId);
-        return Optional.of(item);
+        return item;
     }
 
-    public Optional<Item> getById(Long itemId) {
+    public Item getById(Long itemId) {
         if (!itemStorage.containsKey(itemId)) {
-            return Optional.empty();
+            return null;
         }
-        return Optional.of(itemStorage.get(itemId));
+        return itemStorage.get(itemId);
     }
 
     public List<Item> findByUserId(Long userId) {
         return userItemIndex.get(userId).stream().map(itemStorage::get)
-                .toList();
+            .toList();
     }
 
     public List<Item> findByNameAndDescriptionAndAvailable(String text) {
         return itemStorage.values().stream()
-                .filter(x -> (x.getName().toLowerCase().contains(text.toLowerCase()) ||
-                        x.getDescription().toLowerCase().contains(text.toLowerCase())) &&
-                        x.getAvailable().equals(true)
-                )
-                .toList();
+            .filter(x -> (x.getName().toLowerCase().contains(text.toLowerCase()) ||
+                x.getDescription().toLowerCase().contains(text.toLowerCase())) &&
+                x.getAvailable().equals(true)
+            )
+            .toList();
 
     }
 

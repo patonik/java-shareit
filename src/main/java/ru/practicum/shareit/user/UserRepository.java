@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -23,7 +22,7 @@ public class UserRepository {
         return userEmailIndex.containsKey(userId);
     }
 
-    public Optional<User> save(User user) {
+    public User save(User user) {
         String userEmail = user.getEmail();
         Long userId = user.getId();
         if (userId == null) {
@@ -33,20 +32,23 @@ public class UserRepository {
         }
         userStorage.put(userEmail, user);
         userEmailIndex.put(user.getId(), userEmail);
-        return Optional.of(user);
+        return user;
     }
 
-    public Optional<User> getUser(Long userId) {
-        return Optional.of(userStorage.get(userEmailIndex.get(userId)));
+    public User getUser(Long userId) {
+        return userStorage.get(userEmailIndex.get(userId));
     }
 
     public List<User> getUsers() {
         return new ArrayList<>(userStorage.values());
     }
 
-    public Optional<User> deleteUser(Long userId) {
+    public User deleteUser(Long userId) {
         String email = userEmailIndex.get(userId);
-        Optional<User> deleted = Optional.of(userStorage.get(email));
+        if (email == null) {
+            return null;
+        }
+        User deleted = userStorage.get(email);
         userStorage.remove(email);
         userEmailIndex.remove(userId);
         return deleted;
