@@ -11,9 +11,9 @@ import ru.practicum.shareit.item.model.Item;
 public interface ItemMapper {
     ItemDto toDto(Item item);
 
-    @Mapping(target = "ownerId", source = "userId")
+    @Mapping(target = "user.id", source = "userId")
     Item toEntity(ItemDto itemDto, Long userId);
 
-    @Mapping(target = "ownerId", ignore = true)
+    @Mapping(target = "user", ignore = true)
     Item updateEntity(@MappingTarget Item item, ItemDto itemDto);
 }

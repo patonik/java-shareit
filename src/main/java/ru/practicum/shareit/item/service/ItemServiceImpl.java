@@ -4,15 +4,13 @@ import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.exception.AccessException;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.exception.AccessException;
 import ru.practicum.shareit.item.exception.EntityNotFoundException;
-import ru.practicum.shareit.item.exception.RepositoryException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.exception.DataOperationException;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.exception.MissingValueException;
 
 import java.util.Collections;
@@ -32,45 +30,28 @@ public class ItemServiceImpl implements ItemService {
             itemDto.getAvailable() == null) {
             throw new MissingValueException();
         }
-        if (!userRepository.containsUser(userId)) {
-            throw new AccessException();
-        }
+        userRepository.findById(userId).orElseThrow(AccessException::new);
         itemDto.setId(null);
         Item created =
-            itemRepository.save(itemMapper.toEntity(itemDto, userId), userId);
-        if (created == null) {
-            throw new RepositoryException();
-        }
+            itemRepository.save(itemMapper.toEntity(itemDto, userId));
         return itemMapper.toDto(created);
     }
 
     public ItemDto editItem(ItemDto itemDto, Long userId, Long itemId) {
-        if (!userRepository.containsUser(userId) || !itemRepository.userPossessesItem(userId, itemId)) {
-            throw new AccessException();
-        }
-        Item item = itemRepository.getById(itemId);
-        if (item == null) {
-            throw new EntityNotFoundException();
-        }
+        Item item = itemRepository.findByUserIdAndId(userId, itemId).orElseThrow(EntityNotFoundException::new);
         itemDto.setId(itemId);
         Item updated =
-            itemRepository.save(itemMapper.updateEntity(item, itemDto), userId);
-        if (updated == null) {
-            throw new DataOperationException();
-        }
+            itemRepository.save(itemMapper.updateEntity(item, itemDto));
         return itemMapper.toDto(updated);
     }
 
     public ItemDto getItem(Long itemId) {
-        Item found = itemRepository.getById(itemId);
-        if (found == null) {
-            throw new EntityNotFoundException();
-        }
+        Item found = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
         return itemMapper.toDto(found);
     }
 
     public List<ItemDto> getItems(Long userId) {
-        List<Item> found = itemRepository.findByUserId(userId);
+        List<Item> found = itemRepository.findAllByUserId(userId);
         return found.stream().map(itemMapper::toDto).toList();
     }
 
@@ -78,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
         if (StringUtils.isBlank(text)) {
             return Collections.emptyList();
         }
-        List<Item> found = itemRepository.findByNameAndDescriptionAndAvailable(text);
+        List<Item> found = itemRepository.findByNameOrDescriptionAndAvailable(text);
         return found.stream().map(itemMapper::toDto).toList();
     }
 }

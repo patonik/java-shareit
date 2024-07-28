@@ -1,8 +1,9 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.exception.ConflictException;
@@ -24,58 +25,43 @@ public class UserServiceImpl implements UserService {
         if (email == null) {
             throw new MissingValueException();
         }
-        if (userRepository.containsEmail(email)) {
-            throw new ConflictException();
-        }
-        User created = userRepository.save(userMapper.toEntity(userDto));
-        if (created == null) {
-            throw new DataOperationException();
+        User created;
+        try {
+            created = userRepository.save(userMapper.toEntity(userDto));
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException(e.getMessage());
         }
         return userMapper.toDto(created);
     }
 
     @Override
     public UserDto editUser(UserDto userDto, Long userId) {
-        if (!userRepository.containsUser(userId)) {
-            throw new ConflictException();
-        }
-        User user = userRepository.getUser(userId);
-        if (user == null) {
-            throw new DataOperationException();
-        }
+        User user = userRepository.findById(userId).orElseThrow(ConflictException::new);
         String email = userDto.getEmail();
         if (email != null && !email.equals(user.getEmail())) {
-            if (userRepository.containsEmail(email)) {
+            if (userRepository.findByEmail(email) != null) {
                 throw new ConflictException();
             }
         }
         User updated = userRepository.save(userMapper.updateEntity(userDto, user));
-        if (updated == null) {
-            throw new ConflictException();
-        }
         return userMapper.toDto(updated);
     }
 
     @Override
     public UserDto getUser(Long userId) {
-        User user = userRepository.getUser(userId);
-        if (user == null) {
-            throw new DataOperationException();
-        }
+        User user = userRepository.findById(userId).orElseThrow(DataOperationException::new);
         return userMapper.toDto(user);
     }
 
     @Override
     public List<UserDto> getUsers() {
-        return userRepository.getUsers().stream().map(userMapper::toDto).toList();
+        return userRepository.findAll().stream().map(userMapper::toDto).toList();
     }
 
     @Override
     public UserDto deleteUser(Long userId) {
-        User deleted = userRepository.deleteUser(userId);
-        if (deleted == null) {
-            throw new DataOperationException();
-        }
+        User deleted = userRepository.findById(userId).orElseThrow(DataOperationException::new);
+        userRepository.deleteById(userId);
         return userMapper.toDto(deleted);
     }
 }
