@@ -6,6 +6,8 @@ Template repository for Shareit project.
 ```mermaid
 erDiagram
     USERS ||--o{ ITEM: has
+    USERS ||--|{ BOOKING: requests
+    BOOKING ||--|{ ITEM: books
     USERS {
         bigint id PK
         string name
@@ -17,5 +19,13 @@ erDiagram
         string description
         bigint ownerId FK
         boolean available
+    }
+    BOOKING {
+        bigint id PK
+        timestamp start
+        timestamp end
+        bigint item_id FK
+        bigint booker_id FK
+        string status
     }
 ```

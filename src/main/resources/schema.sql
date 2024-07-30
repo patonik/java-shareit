@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS public.ITEM
     NAME character varying(256) COLLATE pg_catalog."default",
     DESCRIPTION character varying(512) COLLATE pg_catalog."default",
     OWNER_ID bigint NOT NULL,
+    LAST_BOOKING_ID bigint,
+    NEXT_BOOKING_ID bigint,
     AVAILABLE boolean NOT NULL,
     CONSTRAINT ITEM_pkey PRIMARY KEY (ID),
     CONSTRAINT ITEM_USERS_FK FOREIGN KEY (OWNER_ID)

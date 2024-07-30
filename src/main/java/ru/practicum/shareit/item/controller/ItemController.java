@@ -42,7 +42,7 @@ public class ItemController {
                                            @RequestHeader("X-Sharer-User-Id") @NotNull Long userId) {
         ItemDto created = itemService.addItem(itemDto, userId);
         log.info("ItemDto created: " + created.toString());
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(created, HttpStatus.OK);
     }
 
     @PatchMapping("/{itemId}")

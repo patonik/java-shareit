@@ -4,7 +4,6 @@ import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.AccessException;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
@@ -29,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
             itemDto.getAvailable() == null) {
             throw new MissingValueException();
         }
-        userRepository.findById(userId).orElseThrow(AccessException::new);
+        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         itemDto.setId(null);
         Item created =
             itemRepository.save(itemMapper.toEntity(itemDto, userId));

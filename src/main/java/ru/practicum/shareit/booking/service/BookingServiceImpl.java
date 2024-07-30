@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
             end == null) {
             throw new MissingValueException();
         }
-        User user = userRepository.findById(userId).orElseThrow(AccessException::new);
+        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         Item item = itemRepository.findById(inwardBookingDto.getItemId()).orElseThrow(NotFoundException::new);
         if (userId.equals(item.getUser().getId())) {
             throw new EntityNotFoundException();

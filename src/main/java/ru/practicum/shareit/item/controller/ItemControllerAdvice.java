@@ -18,10 +18,10 @@ import ru.practicum.shareit.exception.EntityNotFoundException;
 @Slf4j
 public class ItemControllerAdvice {
     @ExceptionHandler(AccessException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleAccessException(final AccessException e) {
         log.warn("AccessException: {}", e.getMessage());
-        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value()), e);
+        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
