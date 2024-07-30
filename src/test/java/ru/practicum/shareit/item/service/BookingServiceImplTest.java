@@ -11,7 +11,7 @@ import ru.practicum.shareit.user.service.UserServiceImpl;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class ItemServiceImplTest {
+class BookingServiceImplTest {
     @Autowired
     ItemServiceImpl itemService;
     @Autowired

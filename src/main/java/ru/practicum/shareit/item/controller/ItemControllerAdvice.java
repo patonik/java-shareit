@@ -10,9 +10,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.item.exception.AccessException;
-import ru.practicum.shareit.item.exception.DataOperationException;
-import ru.practicum.shareit.item.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.AccessException;
+import ru.practicum.shareit.exception.DataOperationException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 
 @RestControllerAdvice
 @Slf4j

@@ -3,12 +3,13 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
-import ru.practicum.shareit.user.exception.ConflictException;
-import ru.practicum.shareit.user.exception.DataOperationException;
-import ru.practicum.shareit.user.exception.MissingValueException;
+import ru.practicum.shareit.exception.ConflictException;
+import ru.practicum.shareit.exception.DataOperationException;
+import ru.practicum.shareit.exception.MissingValueException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(DataOperationException::new);
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         return userMapper.toDto(user);
     }
 

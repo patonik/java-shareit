@@ -4,15 +4,14 @@ import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.exception.AccessException;
+import ru.practicum.shareit.exception.AccessException;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.exception.MissingValueException;
-
+import ru.practicum.shareit.exception.MissingValueException;
 import java.util.Collections;
 import java.util.List;
 

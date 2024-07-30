@@ -1,0 +1,77 @@
+package ru.practicum.shareit.booking.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.booking.dto.OutwardBookingDto;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
+
+import java.util.List;
+
+@Repository
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b join b.item i " +
+        "join b.booker bk " +
+        "where bk.id = ?1 order by b.start desc")
+    List<OutwardBookingDto> findAllByUserId(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b join b.item i " +
+        "join b.booker bk " +
+        "where bk.id = ?1 and b.status = ?2 order by b.start desc")
+    List<OutwardBookingDto> findAllByUserIdAndStatus(Long userId, Status status);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b join b.item i " +
+        "join b.booker bk " +
+        "where bk.id = ?1 " +
+        "and CURRENT_TIMESTAMP > b.start and CURRENT_TIMESTAMP < b.end order by b.start desc")
+    List<OutwardBookingDto> findAllByUserIdCurrent(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b join b.item i " +
+        "join b.booker bk " +
+        "where bk.id = ?1 and CURRENT_TIMESTAMP < b.start order by b.start desc")
+    List<OutwardBookingDto> findAllByUserIdFuture(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b join b.item i " +
+        "join b.booker bk " +
+        "where bk.id = ?1 and CURRENT_TIMESTAMP > b.end order by b.start desc")
+    List<OutwardBookingDto> findAllByUserIdPast(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b " +
+        "join b.item i join i.user u " +
+        "where u.id = ?1 order by b.start desc")
+    List<OutwardBookingDto> findAllByOwnerId(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b " +
+        "join b.item i join i.user u " +
+        "where u.id = ?1 and b.status = ?2 order by b.start desc")
+    List<OutwardBookingDto> findAllByOwnerIdAndStatus(Long userId, Status status);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b " +
+        "join b.item i join i.user u " +
+        "where u.id = ?1 " +
+        "and CURRENT_TIMESTAMP > b.start and CURRENT_TIMESTAMP < b.end order by b.start desc")
+    List<OutwardBookingDto> findAllByOwnerIdCurrent(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b " +
+        "join b.item i join i.user u " +
+        "where u.id = ?1 " +
+        "and CURRENT_TIMESTAMP < b.start order by b.start desc")
+    List<OutwardBookingDto> findAllByOwnerIdFuture(Long userId);
+
+    @Query("select new ru.practicum.shareit.booking.dto.OutwardBookingDto(b.id, b.start, b.end, b.item, b.booker, b.status) " +
+        "from Booking b " +
+        "join b.item i join i.user u " +
+        "where u.id = ?1 " +
+        "and CURRENT_TIMESTAMP > b.end order by b.start desc")
+    List<OutwardBookingDto> findAllByOwnerIdPast(Long userId);
+}
