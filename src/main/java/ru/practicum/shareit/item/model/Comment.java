@@ -12,10 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.shareit.user.model.User;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -34,6 +33,6 @@ public class Comment {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private User author;
-    @CreatedDate
-    private LocalDate created;
+    @CreationTimestamp
+    private LocalDateTime created;
 }

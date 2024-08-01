@@ -10,12 +10,6 @@ import ru.practicum.shareit.user.model.User;
 @Mapper(componentModel = "spring",
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface InwardBookingMapper {
-//    @Mapping(target = "itemId", source = "item.id")
-//    InwardBookingDto toDto(Booking booking);
-//
-//    @Mapping(target = "itemId", source = "item.id")
-//    InwardBookingDto updateDto(@MappingTarget InwardBookingDto inwardBookingDto, Booking booking);
-
     @Mapping(target = "status", expression = "java(ru.practicum.shareit.booking.model.Status.WAITING)")
     @Mapping(target = "item", source = "item")
     @Mapping(target = "booker", source = "user")

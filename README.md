@@ -8,6 +8,8 @@ erDiagram
     USERS ||--o{ ITEM: has
     USERS ||--|{ BOOKING: requests
     BOOKING ||--|{ ITEM: books
+    USERS ||--o{ COMMENT: creates
+    ITEM ||--o{ COMMENT: has
     USERS {
         bigint id PK
         string name
@@ -27,5 +29,12 @@ erDiagram
         bigint item_id FK
         bigint booker_id FK
         string status
+    }
+    COMMENT {
+        bigint id PK
+        string text
+        bigint item_id FK
+        bigint author_id FK
+        timestamp created
     }
 ```
