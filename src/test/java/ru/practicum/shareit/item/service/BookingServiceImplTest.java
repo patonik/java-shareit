@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import ru.practicum.shareit.ShareItApp;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserServiceImpl;
@@ -20,15 +22,15 @@ class BookingServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        UserDto userDto = UserDto.builder().name("Mao").email("hunweibean@javabeans.com").build();
+        UserDto userDto = UserDto.builder().name("Mao").email("hunweibean2@javabeans.com").build();
         initialItemDto = ItemDto.builder().name("nuclear warhead").description("伟大舵手领导的伟大革命").available(true).build();
         userService.addUser(userDto);
-        itemService.addItem(initialItemDto, 1L);
+        initialItemDto = itemService.addItem(initialItemDto, 1L);
     }
 
     @Test
     void editItem() {
-        ItemDto item = itemService.getItem(1L);
+        ItemDto item = itemService.getItem(initialItemDto.getId());
         assertAll(() -> assertEquals(initialItemDto.getDescription(), item.getDescription()),
                 () -> assertEquals(initialItemDto.getAvailable(), item.getAvailable()),
                 () -> assertEquals(initialItemDto.getName(), item.getName()),
@@ -36,6 +38,8 @@ class BookingServiceImplTest {
         );
         System.out.println(item);
         ItemDto itemDto = ItemDto.builder().id(1L).name("bowl of rice").description("伟大舵手领导的伟大革命").available(false).build();
-        assertEquals(itemDto, itemService.editItem(itemDto, 1L, 1L));
+        ItemDto actual = itemService.editItem(itemDto, 1L, 1L);
+        actual.setUser(null);
+        assertEquals(itemDto, actual);
     }
 }

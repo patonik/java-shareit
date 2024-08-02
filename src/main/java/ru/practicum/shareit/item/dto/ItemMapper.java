@@ -12,6 +12,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring",
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ItemMapper {
+    @Mapping(target = "user", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "id", source = "item.id")
     @Mapping(target = "lastBooking", source = "last", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "nextBooking", source = "next", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)

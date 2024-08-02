@@ -22,8 +22,7 @@ public class ItemDto {
     @NullableNotBlankConstraint
     private String description;
     private Boolean available;
-    @Builder.Default
-    private User user = new User();
+    private User user;
     private Booking lastBooking;
     private Booking nextBooking;
     @Builder.Default
