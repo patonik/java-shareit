@@ -60,14 +60,18 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.toDto(updated, null, null, null);
     }
 
-    public ItemDto getItem(Long itemId) {
+    public ItemDto getItem(Long itemId, Long userId) {
         Item found = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
         LocalDateTime now = LocalDateTime.now();
-        Booking last =
-            bookingRepository.findFirstByItemIdAndEndBeforeOrderByEndDesc(itemId, now);
-        Booking next = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now);
+
+        Booking last = null;
+        Booking next = null;
+        if (userId.equals(found.getUser().getId())) {
+            last = bookingRepository.findFirstByItemIdAndEndBeforeOrderByEndDesc(itemId, now);
+            next = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now);
+        }
         Set<String> comments = commentRepository.findCommentTextByItemId(itemId);
-        return itemMapper.toDto(found, null, null, comments);
+        return itemMapper.toDto(found, last, next, comments);
     }
 
     public List<ItemDto> getItems(Long userId) {
@@ -87,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
     public OutCommentDto addComment(InCommentDto inCommentDto, Long itemId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        if (!bookingRepository.existsByItemIdAndBookerIdAndEndBefore(itemId, userId, LocalDateTime.now())) {
+        if (!bookingRepository.existsByItemIdAndBookerIdAndEndIsLessThanEqual(itemId, userId, LocalDateTime.now())) {
             throw new AccessException();
         }
         Comment comment = commentRepository.save(inCommentMapper.toEntity(inCommentDto, item, user));

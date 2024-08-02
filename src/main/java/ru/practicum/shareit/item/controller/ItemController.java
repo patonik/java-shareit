@@ -57,8 +57,9 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(@PathVariable @NotNull @Min(1) Long itemId) {
-        ItemDto found = itemService.getItem(itemId);
+    public ResponseEntity<ItemDto> getItem(@PathVariable @NotNull @Min(1) Long itemId,
+                                           @RequestHeader("X-Sharer-User-Id") @NotNull @Min(1) Long userId) {
+        ItemDto found = itemService.getItem(itemId, userId);
         log.info("ItemDto found: {}", found.toString());
         return new ResponseEntity<>(found, HttpStatus.OK);
     }

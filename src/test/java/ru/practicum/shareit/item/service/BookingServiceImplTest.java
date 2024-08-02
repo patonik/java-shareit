@@ -28,7 +28,7 @@ class BookingServiceImplTest {
 
     @Test
     void editItem() {
-        ItemDto item = itemService.getItem(initialItemDto.getId());
+        ItemDto item = itemService.getItem(initialItemDto.getId(), 1L);
         assertAll(() -> assertEquals(initialItemDto.getDescription(), item.getDescription()),
                 () -> assertEquals(initialItemDto.getAvailable(), item.getAvailable()),
                 () -> assertEquals(initialItemDto.getName(), item.getName()),
