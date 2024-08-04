@@ -49,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setId(null);
         Item created =
             itemRepository.save(itemMapper.toEntity(itemDto, userId));
-        return itemMapper.toDto(created, null, null, null);
+        return itemMapper.toDto(created, created.getUser(), null, null, null);
     }
 
     public ItemDto editItem(ItemDto itemDto, Long userId, Long itemId) {
@@ -57,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setId(itemId);
         Item updated =
             itemRepository.save(itemMapper.updateEntity(item, itemDto));
-        return itemMapper.toDto(updated, null, null, null);
+        return itemMapper.toDto(updated, updated.getUser(), null, null, null);
     }
 
     public ItemDto getItem(Long itemId, Long userId) {
@@ -71,12 +71,12 @@ public class ItemServiceImpl implements ItemService {
             next = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now);
         }
         Set<String> comments = commentRepository.findCommentTextByItemId(itemId);
-        return itemMapper.toDto(found, last, next, comments);
+        return itemMapper.toDto(found, found.getUser(), last, next, comments);
     }
 
     public List<ItemDto> getItems(Long userId) {
         List<Item> found = itemRepository.findAllByUserId(userId);
-        return found.stream().map(x -> itemMapper.toDto(x, null, null, null)).toList();
+        return found.stream().map(x -> itemMapper.toDto(x, x.getUser(), null, null, null)).toList();
     }
 
     public List<ItemDto> findItems(String text) {
@@ -84,7 +84,7 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
         List<Item> found = itemRepository.findByNameOrDescriptionAndAvailable(text);
-        return found.stream().map(x -> itemMapper.toDto(x, null, null, null)).toList();
+        return found.stream().map(x -> itemMapper.toDto(x, x.getUser(), null, null, null)).toList();
     }
 
     @Override

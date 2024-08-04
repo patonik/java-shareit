@@ -7,6 +7,6 @@ import ru.practicum.shareit.item.model.Comment;
 import java.util.Set;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("select c.text from Comment c where c.item.id = ?1")
+    @Query("select c.text from Comment c where c.item.id = :itemId")
     Set<String> findCommentTextByItemId(Long itemId);
 }

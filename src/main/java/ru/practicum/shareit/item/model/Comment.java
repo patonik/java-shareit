@@ -27,10 +27,10 @@ public class Comment {
     @SequenceGenerator(name = "COMMENT_ID_SEQ", sequenceName = "COMMENT_ID_SEQ", allocationSize = 1)
     private Long id;
     private String text;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private Item item;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private User author;
     @CreationTimestamp

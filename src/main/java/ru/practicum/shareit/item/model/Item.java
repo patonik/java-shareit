@@ -31,7 +31,7 @@ public class Item {
     private Long id;
     private String name;
     private String description;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER_ID", nullable = false, updatable = false)
     private User user;
     private Boolean available;

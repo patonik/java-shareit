@@ -38,10 +38,10 @@ public class Booking {
     private LocalDateTime start;
     @Column(name = "END_DATE")
     private LocalDateTime end;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private Item item;
-    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOKER_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private User booker;
     @Enumerated(value = EnumType.STRING)
