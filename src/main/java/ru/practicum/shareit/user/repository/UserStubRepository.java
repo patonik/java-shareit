@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserRepository {
+public class UserStubRepository {
     private final Map<String, User> userStorage = new HashMap<>();
     private final Map<Long, String> userEmailIndex = new HashMap<>();
     private long generatedId = 1;

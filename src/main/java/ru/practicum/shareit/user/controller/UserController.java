@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<UserDto> addUser(@RequestBody @Valid @NotNull UserDto userDto) {
         UserDto created = userService.addUser(userDto);
         log.info("userDto created: " + created.toString());
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(created, HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}")

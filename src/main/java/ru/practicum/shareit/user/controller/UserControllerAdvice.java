@@ -10,8 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.user.exception.ConflictException;
-import ru.practicum.shareit.user.exception.DataOperationException;
+import ru.practicum.shareit.exception.ConflictException;
+import ru.practicum.shareit.exception.MissingValueException;
 
 @RestControllerAdvice
 @Slf4j
@@ -39,9 +39,9 @@ public class UserControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DataOperationException.class)
-    public ErrorResponse handleDataOperationException(final DataOperationException e) {
-        log.warn("MethodArgumentNotValid: {}", e.getMessage());
+    @ExceptionHandler(MissingValueException.class)
+    public ErrorResponse handleMissingValueException(final MissingValueException e) {
+        log.warn("MissingValueException: {}", e.getMessage());
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
 }

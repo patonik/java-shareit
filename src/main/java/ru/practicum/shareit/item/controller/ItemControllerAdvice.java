@@ -10,17 +10,18 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.item.exception.AccessException;
-import ru.practicum.shareit.item.exception.DataOperationException;
+import ru.practicum.shareit.exception.AccessException;
+import ru.practicum.shareit.exception.DataOperationException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 
 @RestControllerAdvice
 @Slf4j
 public class ItemControllerAdvice {
     @ExceptionHandler(AccessException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleAccessException(final AccessException e) {
         log.warn("AccessException: {}", e.getMessage());
-        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value()), e);
+        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -39,9 +40,15 @@ public class ItemControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataOperationException.class)
-    public ErrorResponse handleMethodArgumentNotValidException(final DataOperationException e) {
+    public ErrorResponse handleDataOperationException(final DataOperationException e) {
         log.warn("DataOperationException: {}", e.getMessage());
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ErrorResponse handleEntityNotFoundException(final EntityNotFoundException e) {
+        log.warn("EntityNotFoundException: {}", e.getMessage());
+        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value()), e);
+    }
 }
