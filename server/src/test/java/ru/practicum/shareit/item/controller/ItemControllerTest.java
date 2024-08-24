@@ -15,7 +15,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@SpringBootTest
+@SpringBootTest(properties = {
+    "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
+    "spring.jackson.serialization.fail-on-empty-beans=false"
+})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ItemControllerTest {

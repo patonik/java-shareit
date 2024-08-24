@@ -85,8 +85,13 @@ public class ItemServiceImpl implements ItemService {
     public OutCommentDto addComment(InCommentDto inCommentDto, Long itemId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        if (!bookingRepository.existsByItemIdAndBookerIdAndEndIsLessThanEqual(itemId, userId, LocalDateTime.now())) {
-            throw new AccessException();
+        LocalDateTime now = LocalDateTime.now();
+        if (!bookingRepository.existsByItemIdAndBookerIdAndEndIsLessThanEqual(itemId,
+            userId,
+            now
+        )
+        ) {
+            throw new AccessException("no relevant bookings in the past");
         }
         Comment comment = commentRepository.save(inCommentMapper.toEntity(inCommentDto, item, user));
         return outCommentMapper.toDto(comment);

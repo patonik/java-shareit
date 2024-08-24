@@ -12,7 +12,10 @@ import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+    "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
+    "spring.jackson.serialization.fail-on-empty-beans=false"
+})
 @ActiveProfiles("test")
 class BookingServiceImplTest {
     @Autowired
