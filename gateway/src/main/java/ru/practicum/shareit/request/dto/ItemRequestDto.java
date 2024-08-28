@@ -1,12 +1,13 @@
 package ru.practicum.shareit.request.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,18 +22,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class ItemRequestDto {
     private Long id;
+    @NotBlank
+    @Size(min = 1, max = 512)
     private String description;
     private LocalDateTime created;
     @Builder.Default
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<ItemDto> items = new HashSet<>();
-
-    public void addItemDto(ItemDto itemDto) {
-        this.items.add(itemDto);
-    }
-
-    public void removeItemDto(ItemDto itemDto) {
-        this.items.remove(itemDto);
-    }
+    private Set<Object> items = new HashSet<>();
 }

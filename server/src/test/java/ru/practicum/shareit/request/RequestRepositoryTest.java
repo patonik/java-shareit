@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -51,14 +50,14 @@ class RequestRepositoryTest {
 
     @Test
     void findAllByRequesterId() {
-        ItemRequestDto first = requestRepository.findAllByRequesterId(user1.getId()).getFirst();
+        ItemRequest first = requestRepository.findAllByRequesterIdOrderByCreatedDesc(user1.getId()).getFirst();
         assertEquals(itemRequest1.getDescription(), first.getDescription());
         assertEquals(itemRequest1.getCreated(), first.getCreated());
     }
 
     @Test
     void findAllByRequesterIdNot() {
-        ItemRequestDto first = requestRepository.findAllByRequesterIdNot(user1.getId()).getFirst();
+        ItemRequest first = requestRepository.findAllByRequesterIdNotOrderByCreatedDesc(user1.getId()).getFirst();
         assertEquals(itemRequest2.getId(), first.getId());
         assertEquals(itemRequest2.getDescription(), first.getDescription());
         assertEquals(itemRequest2.getCreated(), first.getCreated());

@@ -6,18 +6,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Set;
 
 /**
  * TODO Sprint add-controllers.
@@ -39,6 +39,9 @@ public class Item {
     @JoinColumn(name = "OWNER_ID", nullable = false, updatable = false)
     private User user;
     private Boolean available;
-    @ManyToMany(mappedBy = "items")
-    private Set<ItemRequest> requests;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REQUEST_ID", referencedColumnName = "ID")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private ItemRequest itemRequest;
 }

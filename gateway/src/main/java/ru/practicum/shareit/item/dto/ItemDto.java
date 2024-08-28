@@ -20,6 +20,7 @@ public class ItemDto {
     @NullableNotBlankConstraint
     private String description;
     private Boolean available;
+    private Long requestId;
     private Object user;
     private Object lastBooking;
     private Object nextBooking;

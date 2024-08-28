@@ -16,9 +16,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
-    private RequestRepository requestRepository;
-    private UserRepository userRepository;
-    private RequestMapper requestMapper;
+    private final RequestRepository requestRepository;
+    private final UserRepository userRepository;
+    private final RequestMapper requestMapper;
 
     @Override
     public ItemRequestDto addRequest(Long userId, ItemRequestDto itemRequestDto) {
@@ -30,13 +30,13 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<ItemRequestDto> getAllRequests(Long userId) {
         userRepository.findById(userId).orElseThrow(AccessException::new);
-        return requestRepository.findAllByRequesterIdNot(userId);
+        return requestRepository.findAllByRequesterIdNotOrderByCreatedDesc(userId).stream().map(requestMapper::toDto).toList();
     }
 
     @Override
     public List<ItemRequestDto> getMyRequests(Long userId) {
         userRepository.findById(userId).orElseThrow(AccessException::new);
-        return requestRepository.findAllByRequesterId(userId);
+        return requestRepository.findAllByRequesterIdOrderByCreatedDesc(userId).stream().map(requestMapper::toDto).toList();
     }
 
     @Override

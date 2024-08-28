@@ -19,6 +19,7 @@ public class ItemDto {
     private String name;
     private String description;
     private Boolean available;
+    private Long requestId;
     private User user;
     private Booking lastBooking;
     private Booking nextBooking;

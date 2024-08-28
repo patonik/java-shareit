@@ -28,7 +28,10 @@ public class ControllerAdvice {
     @ExceptionHandler(NotAvailableException.class)
     public ErrorResponse handleNotAvailableException(final NotAvailableException e) {
         log.warn("NotAvailableException: {}", e.getMessage());
-        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
+        problemDetail.setProperty("error", "entity not available");
+        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), problemDetail, e);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -59,7 +62,10 @@ public class ControllerAdvice {
     @ExceptionHandler(MissingValueException.class)
     public ErrorResponse handleMissingValueException(final MissingValueException e) {
         log.warn("MissingValueException: {}", e.getMessage());
-        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e);
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
+        problemDetail.setProperty("error", "required value is missing");
+        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), problemDetail, e);
     }
 
     @ExceptionHandler(AccessException.class)

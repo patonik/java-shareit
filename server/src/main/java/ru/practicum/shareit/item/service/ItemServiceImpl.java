@@ -18,6 +18,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.RequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -32,6 +34,7 @@ import java.util.Set;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final RequestRepository requestRepository;
     private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
     private final InCommentMapper inCommentMapper;
@@ -41,8 +44,16 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto addItem(ItemDto itemDto, Long userId) {
         userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         itemDto.setId(null);
-        Item created =
-            itemRepository.save(itemMapper.toEntity(itemDto, userId));
+        Long requestId = itemDto.getRequestId();
+        Item item = itemMapper.toEntity(itemDto, userId);
+        Item created;
+        if (requestId != null) {
+            ItemRequest itemRequest = requestRepository.findById(requestId).orElseThrow(EntityNotFoundException::new);
+            item.setItemRequest(itemRequest);
+            itemRequest.getItems().add(item);
+            requestRepository.save(itemRequest);
+        }
+        created = itemRepository.save(item);
         return itemMapper.toDto(created, created.getUser(), null, null, null);
     }
 

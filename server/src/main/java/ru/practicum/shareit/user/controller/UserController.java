@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
         UserDto created = userService.addUser(userDto);
-        log.info("userDto created: {}", created.toString());
+        log.info("userDto created: {}", created != null ? created.toString() : "null");
         return new ResponseEntity<>(created, HttpStatus.OK);
     }
 
@@ -40,28 +40,28 @@ public class UserController {
     public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto,
                                             @PathVariable Long userId) {
         UserDto updated = userService.editUser(userDto, userId);
-        log.info("userDto updated: {}", updated.toString());
+        log.info("userDto updated: {}", updated != null ? updated.toString() : "null");
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         UserDto found = userService.getUser(userId);
-        log.info("userDto found: {}", found.toString());
+        log.info("userDto found: {}", found != null ? found.toString() : "null");
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
         List<UserDto> found = userService.getUsers();
-        log.info("userDto list found: {}", found.toString());
+        log.info("userDto list found: {}", found != null ? found.toString() : "null");
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
         UserDto deleted = userService.deleteUser(userId);
-        log.info("userDto deleted: {}", deleted.toString());
+        log.info("userDto deleted: {}", deleted != null ? deleted.toString() : "null");
         return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 }
