@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: shareit
       POSTGRES_PASSWORD: shareit
     ports:
-      - "5432:5432"
+      - "6541:5432"
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
