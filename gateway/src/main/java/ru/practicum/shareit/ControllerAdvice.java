@@ -18,8 +18,6 @@ import ru.practicum.shareit.exception.DataOperationException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.MissingValueException;
 import ru.practicum.shareit.exception.NotAvailableException;
-import ru.practicum.shareit.exception.NotFoundException;
-
 
 @RestControllerAdvice
 @Slf4j
@@ -29,7 +27,7 @@ public class ControllerAdvice {
     public ErrorResponse handleNotAvailableException(final NotAvailableException e) {
         log.warn("NotAvailableException: {}", e.getMessage());
         ProblemDetail problemDetail =
-                ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
+            ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
         problemDetail.setProperty("error", "entity not available");
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), problemDetail, e);
     }
@@ -44,13 +42,6 @@ public class ControllerAdvice {
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), problemDetail, e);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.warn("NotFoundException: {}", e.getMessage());
-        return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value()), e);
-    }
-
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ConflictException.class)
     public ErrorResponse handleConflictException(final ConflictException e) {
@@ -63,7 +54,7 @@ public class ControllerAdvice {
     public ErrorResponse handleMissingValueException(final MissingValueException e) {
         log.warn("MissingValueException: {}", e.getMessage());
         ProblemDetail problemDetail =
-                ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
+            ProblemDetail.forStatus(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()));
         problemDetail.setProperty("error", "required value is missing");
         return new ErrorResponseException(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), problemDetail, e);
     }

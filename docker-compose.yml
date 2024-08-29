@@ -29,10 +29,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
       - SPRING_DATASOURCE_USERNAME=shareit
       - SPRING_DATASOURCE_PASSWORD=shareit
-      - SPRING_SQL_INIT_SCHEMA_LOCATIONS=classpath:schema.sql
-      - SERVER_PORT=9090
-      - SPRING_SQL_INIT_MODE=always
-      - SPRING_JACKSON_SERIALIZATION_FAIL_ON_EMPTY_BEANS=false
 
 
   gateway:
